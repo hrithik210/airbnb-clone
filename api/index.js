@@ -2,6 +2,10 @@ const express = require("express");
 const cors = require('cors');
 const { User } = require("./db");
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+
 const app = express();
 
 app.use(express.json());
@@ -55,7 +59,9 @@ app.post('/login', async (req, res) => {
             const passOk = bcrypt.compareSync(password, existingUser.password);
 
             if (passOk) {
-                res.json("pass ok");
+                token = jwt.sign({email : existingUser.email} ,process.env.jwt_secret)
+                res.cookie('token' , '').json("pass ok");
+                console.log(token);
             } else {
                 res.json("pass not ok");
             }
