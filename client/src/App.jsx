@@ -4,6 +4,9 @@ import Loginpage from "./pages/Loginpage"
 import Layout from "./pages/Layout"
 import IndexPage from "./pages/IndexPage"
 import RegisterPage from "./pages/RegisterPage"
+import axios from "axios"
+
+axios.defaults.withCredentials = true ;
 
 function App() {
   

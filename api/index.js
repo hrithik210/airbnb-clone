@@ -9,7 +9,14 @@ require('dotenv').config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+
+
+app.use(cors({
+    origin: 'http://localhost:5173', // Note: no trailing slash
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
 
 app.get("/get", (req, res) => {
     res.json("test ok");
@@ -59,9 +66,11 @@ app.post('/login', async (req, res) => {
             const passOk = bcrypt.compareSync(password, existingUser.password);
 
             if (passOk) {
-                token = jwt.sign({email : existingUser.email} ,process.env.jwt_secret)
-                res.cookie('token' , '').json("pass ok");
-                console.log(token);
+                token = jwt.sign({email : existingUser.email} ,process.env.jwt_secret, {} , (err,token)=>{
+                    if (err) throw err ;
+                    res.cookie('token' , token).json("pass ok");
+                    console.log(token);
+                 })
             } else {
                 res.json("pass not ok");
             }
