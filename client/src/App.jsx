@@ -5,6 +5,7 @@ import Layout from "./pages/Layout"
 import IndexPage from "./pages/IndexPage"
 import RegisterPage from "./pages/RegisterPage"
 import axios from "axios"
+import { UserContextProvider } from "./context/userContext"
 
 axios.defaults.withCredentials = true ;
 
@@ -12,13 +13,15 @@ function App() {
   
 
   return (
-    <Routes>
-      <Route path="/" element = {<Layout />}>
-        <Route path="/" element = {<IndexPage />}></Route>
-        <Route path="/login" element = {<Loginpage />}></Route>
-        <Route path="/register" element = {<RegisterPage />}></Route>
-      </Route>
-    </Routes>
+    <UserContextProvider>
+      <Routes>
+        <Route path="/" element = {<Layout />}>
+          <Route path="/" element = {<IndexPage />}></Route>
+          <Route path="/login" element = {<Loginpage />}></Route>
+          <Route path="/register" element = {<RegisterPage />}></Route>
+        </Route>
+      </Routes>
+  </UserContextProvider>
   )
 }
 

@@ -1,17 +1,21 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
+import { UserContext } from '../context/userContext';
 
 export const Loginpage = () => {
   const [email ,setEmail] = useState('');
   const [password,setpassword] = useState('');
   const [redirect , setRedirect] = useState(false)
 
+  const {setUser} = useContext(UserContext);
+
   async function LoginUser(ev) {
     ev.preventDefault(); 
     
     try {
-      await axios.post('http://localhost:3000/login' , {email , password});
+      const res = await axios.post('http://localhost:3000/login' , {email , password});
+      setUser(res.data);
       alert("login successfull")
       setRedirect(true);
     } 

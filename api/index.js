@@ -68,7 +68,7 @@ app.post('/login', async (req, res) => {
             if (passOk) {
                 token = jwt.sign({email : existingUser.email} ,process.env.jwt_secret, {} , (err,token)=>{
                     if (err) throw err ;
-                    res.cookie('token' , token).json("pass ok");
+                    res.cookie('token' , token).json(existingUser);
                     console.log(token);
                  })
             } else {
