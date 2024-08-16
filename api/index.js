@@ -3,12 +3,14 @@ const cors = require('cors');
 const { User } = require("./db");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 
 app.use(cors({
@@ -66,7 +68,7 @@ app.post('/login', async (req, res) => {
             const passOk = bcrypt.compareSync(password, existingUser.password);
 
             if (passOk) {
-                token = jwt.sign({email : existingUser.email} ,process.env.jwt_secret, {} , (err,token)=>{
+                token = jwt.sign({email : existingUser.email , id:existingUser._id} ,process.env.jwt_secret, {} , (err,token)=>{
                     if (err) throw err ;
                     res.cookie('token' , token).json(existingUser);
                     console.log(token);
@@ -77,6 +79,24 @@ app.post('/login', async (req, res) => {
         }
 
 });
+
+app.get('/profile' , (req,res)=>{
+    const {token} = req.cookies ;
+    
+    if (token) {
+        jwt.verify(token , process.env.jwt_secret, {}, (err,user)=>{
+            if (err) throw err;
+            
+            res.json(user);
+            
+        })
+    }else{
+        res.json(null)
+    }
+
+    
+}) 
+
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
