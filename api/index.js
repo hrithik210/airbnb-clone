@@ -68,7 +68,7 @@ app.post('/login', async (req, res) => {
             const passOk = bcrypt.compareSync(password, existingUser.password);
 
             if (passOk) {
-                token = jwt.sign({email : existingUser.email , id:existingUser._id} ,process.env.jwt_secret, {} , (err,token)=>{
+                token = jwt.sign({email : existingUser.email , id:existingUser._id, name: existingUser.name} ,process.env.jwt_secret, {} , (err,token)=>{
                     if (err) throw err ;
                     res.cookie('token' , token).json(existingUser);
                     console.log(token);
