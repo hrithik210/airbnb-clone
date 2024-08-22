@@ -84,10 +84,10 @@ app.get('/profile' , (req,res)=>{
     const {token} = req.cookies ;
     
     if (token) {
-        jwt.verify(token , process.env.jwt_secret, {}, (err,user)=>{
+        jwt.verify(token , process.env.jwt_secret, {}, async(err,user)=>{
             if (err) throw err;
-            
-            res.json(user);
+            const {email , name , _id} = await User.findById(user.id)
+            res.json({email , name , _id});
             
         })
     }else{
