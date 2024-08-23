@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require('cors');
-const { User } = require("./db");
+const { User } = require("./models/user");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -97,6 +97,9 @@ app.get('/profile' , (req,res)=>{
     
 }) 
 
+app.post('/logout' , (req,res)=>{
+    res.cookie('token', '').json(true)
+})
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');

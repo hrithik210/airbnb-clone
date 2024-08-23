@@ -25,7 +25,7 @@ export const Loginpage = () => {
 }
 
   if (redirect) {
-    return <Navigate to={'/'} />
+    return <Navigate to={'/account'} />
   }
 
   return (
