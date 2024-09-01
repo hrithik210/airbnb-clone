@@ -102,14 +102,14 @@ app.post('/logout' , (req,res)=>{
     res.cookie('token', '').json(true)
 })
 
-app.post('/upload', (req, res) => {
+app.post('/upload', async(req, res) => {
 const {link} = req.body;
 const newImage = 'image'+ Date.now() + '.jpg';   
-download.image({
+await download.image({
     url: link,
-    dest: __dirname+'/uploads' + newImage
+    dest: __dirname + '/uploads/' + newImage
 })
-res.json(newImage);
+res.json(newImage );
 
 });
 
