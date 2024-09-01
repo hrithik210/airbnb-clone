@@ -2,6 +2,7 @@ import React, { act, useContext, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { UserContext } from '../context/userContext'
 import Perks from '../component/Perks'
+import axios from 'axios'
 
 export const PlacesPage = () => {
   const {action} = useParams()
@@ -15,6 +16,13 @@ export const PlacesPage = () => {
   const [checkin ,setcheckin] =useState('')
   const [checkout ,setcheckout] =useState('')
   const [maxGuests ,setmaxGuests] =useState('')
+  
+  async function addphotobylink(ev){
+    ev.preventDefault()
+    const {data :filename} = await axios.post('/upload' , {link : photoslink})
+    setAddedphotos([...addedphotos , filename])
+    setPhotoslink('');
+  }
   
 
 
@@ -51,10 +59,15 @@ export const PlacesPage = () => {
             <input type="text" placeholder='add using a link'
             value={photoslink} onChange={(e)=>setPhotoslink(e.target.value)}
             className='border border-gray-300'/>
-            <button className='bg-gray-200 rounded-lg px-3'>Add&nbsp; Photo</button>
+            <button onClick={addphotobylink} className='bg-gray-200 rounded-lg px-3'>Add&nbsp; Photo</button>
           </div>
 
           <div className='mt-2 grid grid-cols-3 lg:grid-col-6 md:grid-cols-4'>
+            {addedphotos.length >0 && addedphotos.map((link)=>(
+              <div>
+                {link}
+              </div>
+            ))}
             <button className='flex justify-center gap-1 border bg-gray-2 items-center cursor-pointer00 rounded-2xl p-4 text-xl text-gray-500'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
@@ -67,7 +80,7 @@ export const PlacesPage = () => {
           <h2 className='text-xl font-semibold mt-4'>Description</h2>
           <p className='text-sm text-gray-500'>Description of place</p>
           
-          <textarea value={description} onchange= {e => setdescription(e.target.value)}/>
+          <textarea value={description} onChange= {e => setdescription(e.target.value)}/>
           <h2 className='text-xl font-semibold mt-4'>Perks</h2>
           <p className='text-sm text-gray-500'>Select all the perks u need</p>
 
@@ -76,7 +89,7 @@ export const PlacesPage = () => {
           </div>
           <h2 className='text-xl font-semibold mt-4'>Extra Info</h2>
           <p className='text-sm text-gray-500'>house rules ,etc </p>
-          <textarea value={extraInfo} onchange = {e => setextraInfo(e.target.value)} />
+          <textarea value={extraInfo} onChange = {e => setextraInfo(e.target.value)} />
 
           <h2 className='text-xl font-semibold mt-4'>Check-in & out time</h2>
           <p className='text-sm text-gray-500'>heck-in and check-out time & remember to have some time window for cleaning the room between guests</p>
@@ -85,17 +98,17 @@ export const PlacesPage = () => {
             
             <div>
               <h3 className='mt-2 -mb-1'>Check-in </h3>
-              <input type="text" value={checkin} onchange ={e => setcheckin(e.target.value)}/>
+              <input type="text" value={checkin} onChange ={e => setcheckin(e.target.value)}/>
             </div>
             
             <div>
               <h3 className='mt-2 -mb-1'>Check-out </h3>  
-              <input type="text" value={checkout} onchange= {(e)=> setcheckout(e.target.value)}/>
+              <input type="text" value={checkout} onChange= {(e)=> setcheckout(e.target.value)}/>
             </div>
             
             <div>
               <h3 className='mt-2 -mb-1'>Max guests </h3>
-              <input type="text" value={maxGuests} l onchange ={e => setmaxGuests(e.target.value)}/>
+              <input type="number" value={maxGuests} onChange ={e => setmaxGuests(e.target.value)}/>
             </div>
           
           </div>

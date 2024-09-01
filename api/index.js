@@ -5,10 +5,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
+const download = require('image-downloader');
 
 
 const app = express();
-
+app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -100,6 +101,18 @@ app.get('/profile' , (req,res)=>{
 app.post('/logout' , (req,res)=>{
     res.cookie('token', '').json(true)
 })
+
+app.post('/upload', (req, res) => {
+const {link} = req.body;
+const newImage = 'image'+ Date.now() + '.jpg';   
+download.image({
+    url: link,
+    dest: __dirname+'/uploads' + newImage
+})
+res.json(newImage);
+
+});
+
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
